@@ -1,0 +1,104 @@
+<main class="notes-list min-h-screen">
+
+  <fieldset class="notes-filter mx-4 mb-8 p-2 max-w-max border-t-2 border-b-2 border-black bg-yellow-200">
+
+    <legend class="text-lg ml-8 px-1 rounded-t-md bg-yellow-200">Filter by</legend>
+
+    <div class="grid grid-cols-3 gap-4">
+
+      <div>
+        <label for="input-note-type">Type:</label>
+        <select name="note-type" id="input-note-type" [formControl]="filterType">
+          <option value=""></option>
+          <option value="notes">Notes</option>
+          <option value="tasks">Tasks</option>
+          <option value="events">Events</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="input-note-category">Category:</label>
+        <select name="note-category" id="input-note-category" [formControl]="filterCategory">
+          <option value=""></option>
+          <option *ngFor="let category of notesCategories" [value]="category">{{ category }}</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="input-note-importance">Importance:</label>
+        <select name="note-importance" id="input-note-importance" [formControl]="filterImportance">
+          <option value=""></option>
+          <option value="1">Low</option>
+          <option value="2">Medium</option>
+          <option value="3">High</option>
+          <option value="4">Critical</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="input-note-title">Title:</label>
+        <input list="note-titles" type="text" name="note-title" id="input-note-title" [formControl]="filterTitle">
+      </div>
+
+      <datalist id="note-titles">
+        <ng-container *ngFor="let note of notes">
+          <option *ngIf="note.title" [value]="note.title">
+        </ng-container>
+      </datalist>
+
+      <div>
+        <label for="input-note-text">Text:</label>
+        <input type="text" name="note-text" id="input-note-text" [formControl]="filterText">
+      </div>
+
+      <div>
+        <label for="input-note-date">Starting from:</label>
+        <input type="date" name="note-date" id="input-note-date" [formControl]="filterDate">
+      </div>
+
+    </div>
+
+  </fieldset>
+
+  <h1 *ngIf="notesFiltered && (notesFiltered.notes.length || notesFiltered.tasks.length || notesFiltered.events.length)" class="header-main">Your notes</h1>
+  <h1 *ngIf="notesFiltered && !notesFiltered.notes.length && !notesFiltered.tasks.length && !notesFiltered.events.length" class="header-main">No notes match such filters</h1>
+
+  <div *ngIf="this.isGettingNotes">
+    <h3 class="text-center mt-8">
+      <div class="spinner"></div>
+      Getting your notes
+    </h3>
+  </div>
+
+  <div *ngIf="notesFiltered">
+
+    <section *ngIf="notesFiltered.notes.length" class="notes">
+
+      <h2 class="notes-header">Notes:</h2>
+      <div class="notes-grid">
+          <app-note-root *ngFor="let note of notesFiltered.notes" [note]="note" [isNoteBodyConstrained]="true" class="note-root"></app-note-root>
+      </div>
+
+    </section>
+
+    <section *ngIf="notesFiltered.tasks.length" class="notes tasks">
+
+      <h2 class="notes-header">Tasks:</h2>
+      <div class="notes-grid">
+        <app-note-root *ngFor="let note of notesFiltered.tasks" [note]="note" [isNoteBodyConstrained]="true" class="note-root"></app-note-root>
+      </div>
+
+    </section>
+
+    <section *ngIf="notesFiltered.events.length" class="notes events">
+
+      <h2 class="notes-header">Events:</h2>
+      <div class="notes-grid">
+        <app-note-root *ngFor="let note of notesFiltered.events" [note]="note" [isNoteBodyConstrained]="true" class="note-root"></app-note-root>
+      </div>
+
+    </section>
+
+  </div>
+
+</main>
