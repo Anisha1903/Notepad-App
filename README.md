@@ -1,4 +1,4 @@
-# NotepadApp
+# Notepad App
 
 Notepad web app for keeping and managing notes.
 
